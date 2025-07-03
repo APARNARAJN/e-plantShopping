@@ -1,3 +1,4 @@
+// Updated CartItem.jsx with empty cart check and improved layout
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
@@ -7,7 +8,6 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
-  // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
     return cart.reduce((total, item) => {
       const price = parseFloat(item.cost.substring(1));
@@ -39,8 +39,9 @@ const CartItem = ({ onContinueShopping }) => {
   return (
     <div className="cart-container">
       <h2 className="cart-total-title">Total Cart Amount: ${calculateTotalAmount()}</h2>
+
       {cart.length === 0 ? (
-        <p className="cart-empty">Your cart is empty.</p>
+        <p className="cart-empty">Your cart is currently empty.</p>
       ) : (
         cart.map(item => (
           <div className="cart-item" key={item.name}>
