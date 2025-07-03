@@ -9,17 +9,11 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
-  return cart.reduce((total, item) => {
-    const price = parseFloat(item.cost.substring(1)); // removes '$'
-    return total + price * item.quantity;
-  }, 0).toFixed(2);
+    return cart.reduce((total, item) => {
+      const price = parseFloat(item.cost.substring(1));
+      return total + price * item.quantity;
+    }, 0).toFixed(2);
   };
-
-  const handleContinueShopping = (e) => {
-    onContinueShopping(e);
-  };
-
-
 
   const handleIncrement = (item) => {
     dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
@@ -27,28 +21,28 @@ const CartItem = ({ onContinueShopping }) => {
 
   const handleDecrement = (item) => {
     if (item.quantity > 1) {
-    dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
-  } else {
-     dispatch(removeItem({ name: item.name }));
-  }
+      dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
+    } else {
+      dispatch(removeItem({ name: item.name }));
+    }
   };
 
   const handleRemove = (item) => {
-     dispatch(removeItem({ name: item.name }));
-
+    dispatch(removeItem({ name: item.name }));
   };
 
-  // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
-     const price = parseFloat(item.cost.substring(1));
-  return (price * item.quantity).toFixed(2);
+    const price = parseFloat(item.cost.substring(1));
+    return (price * item.quantity).toFixed(2);
   };
 
   return (
     <div className="cart-container">
-      <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount()}</h2>
-      <div>
-        {cart.map(item => (
+      <h2 className="cart-total-title">Total Cart Amount: ${calculateTotalAmount()}</h2>
+      {cart.length === 0 ? (
+        <p className="cart-empty">Your cart is empty.</p>
+      ) : (
+        cart.map(item => (
           <div className="cart-item" key={item.name}>
             <img className="cart-item-image" src={item.image} alt={item.name} />
             <div className="cart-item-details">
@@ -63,12 +57,11 @@ const CartItem = ({ onContinueShopping }) => {
               <button className="cart-item-delete" onClick={() => handleRemove(item)}>Delete</button>
             </div>
           </div>
-        ))}
-      </div>
-      <div style={{ marginTop: '20px', color: 'black' }} className='total_cart_amount'></div>
-      <div className="continue_shopping_btn">
-        <button className="get-started-button" onClick={(e) => handleContinueShopping(e)}>Continue Shopping</button>
-        <br />
+        ))
+      )}
+
+      <div className="continue-shopping-btns">
+        <button className="get-started-button" onClick={onContinueShopping}>Continue Shopping</button>
         <button className="get-started-button1">Checkout</button>
       </div>
     </div>
@@ -76,5 +69,3 @@ const CartItem = ({ onContinueShopping }) => {
 };
 
 export default CartItem;
-
-
